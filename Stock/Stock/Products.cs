@@ -26,8 +26,8 @@ namespace Stock
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
-
+            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
+            SqlConnection con = Connection.GetConnection();
             //Insert Logic
             con.Open();
             bool status = false;
@@ -73,7 +73,8 @@ namespace Stock
         }
         public void LoadData()
         {
-            SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
+            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
+            SqlConnection con = Connection.GetConnection();
             SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM [dbo].[Products]", con);
             DataTable dt = new DataTable();
             sda.Fill(dt);
@@ -111,7 +112,8 @@ namespace Stock
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
+            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
+            SqlConnection con = Connection.GetConnection();
             var sqlQuery = "";
 
             if (IfProductExists(con, textBoxProductCode.Text))
