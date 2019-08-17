@@ -26,40 +26,43 @@ namespace Stock
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
-            SqlConnection con = Connection.GetConnection();
-            //Insert Logic
-            con.Open();
-            bool status = false;
-            if (comboBoxStatus.SelectedIndex == 0)
+            if (Validation())
             {
-                status = true;
-            }
-            else
-            {
-                status = false;
-            }
+                SqlConnection con = Connection.GetConnection();
+                //Insert Logic
+                con.Open();
+                bool status = false;
+                if (comboBoxStatus.SelectedIndex == 0)
+                {
+                    status = true;
+                }
+                else
+                {
+                    status = false;
+                }
 
-            var sqlQuery = "";
+                var sqlQuery = "";
 
-            if (IfProductExists(con, textBoxProductCode.Text))
-            {
-                //@ is used as it support multi lines
-                sqlQuery = @"UPDATE [Products]
-                             SET [ProductName] = '" + textBoxlProductName.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + textBoxProductCode.Text +"'";
-            }
-            else
-            {
-                sqlQuery = @"INSERT INTO [dbo].[Products] ([ProductCode], [ProductName], [ProductStatus]) 
+                if (IfProductExists(con, textBoxProductCode.Text))
+                {
+                    //@ is used as it support multi lines
+                    sqlQuery = @"UPDATE [Products]
+                             SET [ProductName] = '" + textBoxlProductName.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
+                }
+                else
+                {
+                    sqlQuery = @"INSERT INTO [dbo].[Products] ([ProductCode], [ProductName], [ProductStatus]) 
                              VALUES ('" + textBoxProductCode.Text + "', '" + textBoxlProductName.Text + "', '" + status + "')";
+                }
+
+                SqlCommand cmd = new SqlCommand(sqlQuery, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                //Reading Data
+                LoadData();
+                ResetRecords(); 
             }
-
-            SqlCommand cmd = new SqlCommand(sqlQuery, con);
-            cmd.ExecuteNonQuery();
-            con.Close();
-
-            //Reading Data
-            LoadData();
         }
         private bool IfProductExists(SqlConnection con, string productCode)
         {
@@ -73,7 +76,6 @@ namespace Stock
         }
         public void LoadData()
         {
-            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
             SqlConnection con = Connection.GetConnection();
             SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM [dbo].[Products]", con);
             DataTable dt = new DataTable();
@@ -97,6 +99,7 @@ namespace Stock
         }
         private void dataGridViewProducts_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            buttonAdd.Text = "Update";
             textBoxProductCode.Text = dataGridViewProducts.SelectedRows[0].Cells[0].Value.ToString();
             textBoxlProductName.Text = dataGridViewProducts.SelectedRows[0].Cells[1].Value.ToString();
 
@@ -112,26 +115,56 @@ namespace Stock
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
-            SqlConnection con = Connection.GetConnection();
-            var sqlQuery = "";
-
-            if (IfProductExists(con, textBoxProductCode.Text))
+            if (Validation())
             {
-                //@ is used as it support multi lines
-                con.Open();
-                sqlQuery = @"DELETE FROM [Products] WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
-                SqlCommand cmd = new SqlCommand(sqlQuery, con);
-                cmd.ExecuteNonQuery();
-                con.Close();
-            }
-            else
-            {
-                MessageBox.Show("Record Does Not Exists...");
-            }
+                SqlConnection con = Connection.GetConnection();
+                var sqlQuery = "";
 
-            //Reading Data
-            LoadData();
+                if (IfProductExists(con, textBoxProductCode.Text))
+                {
+                    //@ is used as it support multi lines
+                    con.Open();
+                    sqlQuery = @"DELETE FROM [Products] WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
+                    SqlCommand cmd = new SqlCommand(sqlQuery, con);
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Record Does Not Exists...");
+                }
+
+                //Reading Data
+                LoadData();
+                ResetRecords();
+            }
+        }
+
+        //to clear records and updating Add button
+        private void ResetRecords()
+        {
+            textBoxProductCode.Clear();
+            textBoxlProductName.Clear();
+            comboBoxStatus.SelectedIndex = -1;
+            buttonAdd.Text = "Add";
+            textBoxProductCode.Focus();
+        }
+
+        //To Clear values if don't want to add or update
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            ResetRecords();
+        }
+
+        //method to prevent empty record insert
+        private bool Validation()
+        {
+            bool result = false;
+            if(!string.IsNullOrEmpty(textBoxProductCode.Text) && !string.IsNullOrEmpty(textBoxlProductName.Text) && comboBoxStatus.SelectedIndex > -1)
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }

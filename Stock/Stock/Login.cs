@@ -28,7 +28,6 @@ namespace Stock
         private void btnLogin_Click(object sender, EventArgs e)
         {
             //To-DO: Check UserName and Password
-            //SqlConnection con = new SqlConnection("Data Source=ADMINRG-TSF729J\\SQLEXPRESS;Initial Catalog=Stock;Integrated Security=True");
             SqlConnection con = Connection.GetConnection();
 
             //SqlDataAdapter automatically opens and closes a connection
