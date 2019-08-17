@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblProductCode = new System.Windows.Forms.Label();
             this.lblProductName = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.textBoxProductCode = new System.Windows.Forms.TextBox();
-            this.textBoxlProductName = new System.Windows.Forms.TextBox();
+            this.textBoxProductName = new System.Windows.Forms.TextBox();
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
@@ -41,7 +42,9 @@
             this.ColumnProductName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonReset = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProducts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblProductCode
@@ -82,13 +85,13 @@
             this.textBoxProductCode.Size = new System.Drawing.Size(139, 25);
             this.textBoxProductCode.TabIndex = 3;
             // 
-            // textBoxlProductName
+            // textBoxProductName
             // 
-            this.textBoxlProductName.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxlProductName.Location = new System.Drawing.Point(168, 74);
-            this.textBoxlProductName.Name = "textBoxlProductName";
-            this.textBoxlProductName.Size = new System.Drawing.Size(149, 25);
-            this.textBoxlProductName.TabIndex = 4;
+            this.textBoxProductName.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxProductName.Location = new System.Drawing.Point(168, 74);
+            this.textBoxProductName.Name = "textBoxProductName";
+            this.textBoxProductName.Size = new System.Drawing.Size(149, 25);
+            this.textBoxProductName.TabIndex = 4;
             // 
             // comboBoxStatus
             // 
@@ -166,6 +169,10 @@
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // Products
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -176,15 +183,17 @@
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.comboBoxStatus);
-            this.Controls.Add(this.textBoxlProductName);
+            this.Controls.Add(this.textBoxProductName);
             this.Controls.Add(this.textBoxProductCode);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblProductName);
             this.Controls.Add(this.lblProductCode);
             this.Name = "Products";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Products";
             this.Load += new System.EventHandler(this.Products_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProducts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,7 +205,7 @@
         private System.Windows.Forms.Label lblProductName;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.TextBox textBoxProductCode;
-        private System.Windows.Forms.TextBox textBoxlProductName;
+        private System.Windows.Forms.TextBox textBoxProductName;
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonAdd;
@@ -205,5 +214,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnProductName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
         private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

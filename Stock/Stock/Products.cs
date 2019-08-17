@@ -47,12 +47,12 @@ namespace Stock
                 {
                     //@ is used as it support multi lines
                     sqlQuery = @"UPDATE [Products]
-                             SET [ProductName] = '" + textBoxlProductName.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
+                             SET [ProductName] = '" + textBoxProductName.Text + "', [ProductStatus] = '" + status + "' WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
                 }
                 else
                 {
                     sqlQuery = @"INSERT INTO [dbo].[Products] ([ProductCode], [ProductName], [ProductStatus]) 
-                             VALUES ('" + textBoxProductCode.Text + "', '" + textBoxlProductName.Text + "', '" + status + "')";
+                             VALUES ('" + textBoxProductCode.Text + "', '" + textBoxProductName.Text + "', '" + status + "')";
                 }
 
                 SqlCommand cmd = new SqlCommand(sqlQuery, con);
@@ -101,7 +101,7 @@ namespace Stock
         {
             buttonAdd.Text = "Update";
             textBoxProductCode.Text = dataGridViewProducts.SelectedRows[0].Cells[0].Value.ToString();
-            textBoxlProductName.Text = dataGridViewProducts.SelectedRows[0].Cells[1].Value.ToString();
+            textBoxProductName.Text = dataGridViewProducts.SelectedRows[0].Cells[1].Value.ToString();
 
             if (dataGridViewProducts.SelectedRows[0].Cells[2].Value.ToString() == "Active")
             {
@@ -115,28 +115,32 @@ namespace Stock
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            if (Validation())
+            DialogResult dialogResult = MessageBox.Show("Sure! You Want To Delete?","Message",MessageBoxButtons.YesNo);
+            if(dialogResult == DialogResult.Yes)
             {
-                SqlConnection con = Connection.GetConnection();
-                var sqlQuery = "";
-
-                if (IfProductExists(con, textBoxProductCode.Text))
+                if (Validation())
                 {
-                    //@ is used as it support multi lines
-                    con.Open();
-                    sqlQuery = @"DELETE FROM [Products] WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
-                    SqlCommand cmd = new SqlCommand(sqlQuery, con);
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Record Does Not Exists...");
-                }
+                    SqlConnection con = Connection.GetConnection();
+                    var sqlQuery = "";
 
-                //Reading Data
-                LoadData();
-                ResetRecords();
+                    if (IfProductExists(con, textBoxProductCode.Text))
+                    {
+                        //@ is used as it support multi lines
+                        con.Open();
+                        sqlQuery = @"DELETE FROM [Products] WHERE [ProductCode] = '" + textBoxProductCode.Text + "'";
+                        SqlCommand cmd = new SqlCommand(sqlQuery, con);
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Record Does Not Exists...");
+                    }
+
+                    //Reading Data
+                    LoadData();
+                    ResetRecords();
+                }
             }
         }
 
@@ -144,7 +148,7 @@ namespace Stock
         private void ResetRecords()
         {
             textBoxProductCode.Clear();
-            textBoxlProductName.Clear();
+            textBoxProductName.Clear();
             comboBoxStatus.SelectedIndex = -1;
             buttonAdd.Text = "Add";
             textBoxProductCode.Focus();
@@ -160,9 +164,24 @@ namespace Stock
         private bool Validation()
         {
             bool result = false;
-            if(!string.IsNullOrEmpty(textBoxProductCode.Text) && !string.IsNullOrEmpty(textBoxlProductName.Text) && comboBoxStatus.SelectedIndex > -1)
+            if(string.IsNullOrEmpty(textBoxProductCode.Text))
             {
-                result = true;
+                errorProvider1.Clear();
+                errorProvider1.SetError(textBoxProductCode, "Product Code Required.");
+            }
+            else if (string.IsNullOrEmpty(textBoxProductName.Text))
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(textBoxProductName, "Product Name Required.");
+            }
+            else if (comboBoxStatus.SelectedIndex == -1)
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(comboBoxStatus, "Select Status.");
+            }
+            else
+            {
+                return true;
             }
             return result;
         }
